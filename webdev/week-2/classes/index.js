@@ -23,6 +23,8 @@ const color = rect.print();
 
 console.log(area);
 
+// default classes provided by JS
+
 const map = new Map();
 map.set("name", "k-adi");
 map.set("age", 50);
@@ -32,3 +34,23 @@ const myage = map.get("age");
 
 console.log(myname);
 console.log(myage);
+
+const currentTime = new Date();
+
+console.log(currentTime.toLocaleTimeString());
+console.log(currentTime.toUTCString());
+console.log(currentTime.toTimeString());
+console.log(currentTime.toLocaleString());
+
+// promises classes
+
+function printLog() {
+  console.log("printed after passed Time");
+}
+
+function setTimeOutPromisified(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+setTimeout(printLog, 3000);
+setTimeOutPromisified(5000).then(printLog);
