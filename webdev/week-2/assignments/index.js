@@ -1,5 +1,4 @@
 // anagram
-
 function isAnagram(str1, str2) {
   let first_str = str1.toLowerCase().split("").sort().join("");
   let second_str = str2.toLowerCase().split("").sort().join("");
@@ -30,4 +29,4 @@ const isLarge = findLarge(arrNum);
 console.log(isLarge);
 
 
-// 
+// calculateTotalSpentByCategory  I didn't get a point what actually want in this task
