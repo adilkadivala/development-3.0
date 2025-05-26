@@ -10,6 +10,17 @@
 // getElementsByTagName
 
 // let fetch body
-const print = document.getElementsByTagName("body")[0];
-console.log("body fetched", print);
 
+let list = [];
+
+function addTodo() {
+  const myEle = document.querySelector("input");
+  const myVal = myEle.value;
+
+  list.push(myVal);
+  console.log(myVal);
+}
+
+let addinList = document.querySelector("li");
+
+console.log(addinList);
