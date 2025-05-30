@@ -15,6 +15,11 @@
 
 // let fetch body
 
+
+// dom-part-2
+
+// created self framwork..
+
 let list = [];
 
 function addTodo() {
