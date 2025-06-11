@@ -35,15 +35,12 @@ app.get("/vote", isAdult, async (req, res) => {
   }
 });
 
-
 /*
 dynamic route
 
 "/post/:id"
 
-*/ 
-
-
+*/
 
 app.listen(port, () => {
   console.log(`server started at http://localhost:${port}`);
