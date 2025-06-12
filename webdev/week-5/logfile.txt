@@ -1,0 +1,2 @@
+method of request is GET, and request time was 8:12:31 AM, and request url was localhost:3000, and request came on this route / 
+method of request is GET, and request time was 8:12:35 AM, and request url was localhost:3000, and request came on this route / 

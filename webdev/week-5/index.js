@@ -15,9 +15,19 @@ it can
     req.originalUrl = will give on which route request has come 
 */
 
+/*
+
+cors:: cors stands for cross origin resource sharing
+
+
+*/
+
 import express from "express";
+import fs from "fs";
 
 const app = express();
+
+app.use(express.json());
 
 const port = 3000;
 
@@ -28,7 +38,6 @@ let requestCount = 0;
 // req. counter middleware
 function trackReq(req, res, next) {
   requestCount = requestCount + 1;
-  console.log(`total number of requests = ${requestCount} `);
   next();
 }
 
@@ -43,23 +52,37 @@ function modifyReq(req, res, next) {
 function blockTheUser(req, res, next) {
   if (requestCount < 5) {
     res.send("You are not able to see welcome message, refresh 5 times");
-    req.emit();
+    return;
   }
   next();
 }
 
 //
 function logIncomingReq(req, res, next) {
-  console.log("method is " + req.method);
-  console.log(new Date().toLocaleTimeString());
-  console.log("request comes form " + req.host);
+  const method = req.method;
+  const time = new Date().toLocaleTimeString();
+  const host = req.host;
+  const routes = req.url;
+
+  const data = `method of request is ${method}, and request time was ${time}, and request url was ${host}, and request came on this route ${routes} \n`;
+
+  fs.appendFile("./logfile.txt", data, "utf-8", (err) => {
+    if (err) console.error(err);
+  });
+
   next();
 }
 
 // default route
-app.get("/", trackReq, modifyReq, logIncomingReq, (req, res) => {
+app.get("/", trackReq, modifyReq, blockTheUser, logIncomingReq, (req, res) => {
   res.send("hey your welcome");
-  req.emit();
+});
+
+app.post("/getbody", (req, res) => {
+  console.log(req.body);
+  const text = req.body.bodyText;
+  console.log(text);
+  return res.json({ bodyText: text });
 });
 
 // server port
