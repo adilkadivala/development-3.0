@@ -32,3 +32,23 @@ Commit: For Saving the files.
 Push: Uploads commits to a repo.,  
 Pull: Download changes from a remote repository to your local repo.,
 
+------
+
+branch: list all branches with current one.
+checkout -b: for creating a new branch.
+checkout -d: for deleting a perticular branch.
+merge: merging changes from one branch to another,
+
+
+------
+
+Git commands to resolve conflict..
+
+git log --merge: produce the list of commits that are causing the conflict.
+git diff: identify the differences between the states repositories or files.
+git checkout: used to undo the changes made to the file, or for changing brances.
+git reset mixed: used to undo changes to the working directory and staging area.
+git merge --abroat: help in existing merge process and returmign back to the state before merging begun.
+git reset: used at the time of merge conflict to reset the conflicted files to thier original state.
+
+
