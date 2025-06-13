@@ -1,0 +1,34 @@
+week-5...
+
+------
+
+what is git ? 
+Git is a Free and open-source version control system...
+
+what is version control system ? 
+A system that keeps track of our files or projects...
+
+------
+
+There are two types of Version Control System,
+
+1> centralized....
+2> distributed....
+
+------
+
+what is Github ?
+
+Github is a web-based hosting service for git repository, (you can use git without github, but you can't use github without git.)
+
+
+------
+
+Github commands
+
+Clone: bring a repository hosted somewhare on github into a folder or your local machine.
+Add: Track files and changes in Git.
+Commit: For Saving the files.
+Push: Uploads commits to a repo.,  
+Pull: Download changes from a remote repository to your local repo.,
+
