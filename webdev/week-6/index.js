@@ -1,7 +1,12 @@
 // authentication with JWT
 
 const express = require("express");
+const jwt = require("jsonwebtoken");
 const app = express();
+
+// JWT secret
+
+const JWT_SECRET = "secretissecret";
 
 // memory storage for storing useers
 const users = [];
@@ -13,7 +18,6 @@ app.use(express.json());
 const PORT = 3000;
 
 // generate token
-
 function generateToken(params) {
   let chakBhodi = [
     "a",
@@ -81,16 +85,15 @@ app.post("/signin", (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
 
-  console.log(req.body);
-
   const user = users.find(
     (user) => user.username === username && user.password === password
   );
 
   if (user) {
-    const token = generateToken();
-    user.token = token;
-    console.log(user);
+    // const token = generateToken();
+    // user.token = token;
+
+    const token = jwt.sign({ username: username }, JWT_SECRET);
     return res.json({ message: token });
   } else {
     return res.status(403).json({ message: "Invalid username or password" });
@@ -108,15 +111,38 @@ app.post("/signup", (req, res) => {
     password: password,
   });
 
-  console.log(users);
-
   res.json({ message: "you're signed up " });
 });
 
+// personal info. end point
 app.get("/me", (req, res) => {
-  
-})
+  // const token = req.headers.token;
+  const { token } = req.headers;
+  // const user = users.find((user) => user.token === token);
+
+  const verifyUser = jwt.verify(token, JWT_SECRET);
+  const userName = verifyUser.username;
+  const user = users.find((user) => user.username === userName);
+
+  if (user) {
+    return res.json({
+      username: user.username,
+      password: user.password,
+    });
+  } else {
+    return res.json({ message: "token invalid" });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`server is running http://localhost:${PORT}`);
 });
+
+/* self created token V/S jwt token
+
+self-created token is a state-full token, we need to store data in a storage..
+
+jwt token is state-less token, token carried all info. of a user, no more need to store in a storage..
+
+
+*/
