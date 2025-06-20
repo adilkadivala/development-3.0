@@ -14,6 +14,19 @@ const users = [];
 // middlewares
 app.use(express.json());
 
+// auth middleware
+
+function auth(req, res, next) {
+  const { token } = req.headers;
+  const verifyUser = jwt.verify(token, JWT_SECRET);
+  if (verifyUser.username) {
+    req.username = verifyUser.username;
+    next();
+  } else {
+    return res.status(403).json({ message: "you're unauthorised" });
+  }
+}
+
 // server port
 const PORT = 3000;
 
@@ -115,23 +128,22 @@ app.post("/signup", (req, res) => {
 });
 
 // personal info. end point
-app.get("/me", (req, res) => {
+app.get("/me", auth, (req, res) => {
   // const token = req.headers.token;
-  const { token } = req.headers;
-  // const user = users.find((user) => user.token === token);
 
+  /* 
+  before middleware
+  const { token } = req.headers;
+  
   const verifyUser = jwt.verify(token, JWT_SECRET);
   const userName = verifyUser.username;
-  const user = users.find((user) => user.username === userName);
+  */
+  const user = users.find((user) => user.username === req.username);
 
-  if (user) {
-    return res.json({
-      username: user.username,
-      password: user.password,
-    });
-  } else {
-    return res.json({ message: "token invalid" });
-  }
+  return res.json({
+    username: user.username,
+    password: user.password,
+  });
 });
 
 app.listen(PORT, () => {
@@ -143,6 +155,5 @@ app.listen(PORT, () => {
 self-created token is a state-full token, we need to store data in a storage..
 
 jwt token is state-less token, token carried all info. of a user, no more need to store in a storage..
-
 
 */
