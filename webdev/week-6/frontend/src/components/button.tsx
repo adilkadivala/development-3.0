@@ -2,15 +2,16 @@ import { useId } from "react";
 
 interface Button {
   type: "submit" | "reset" | "button" | undefined;
-  text: string;
   className: string;
+  children: React.ReactNode;
+  onClick?: () => void;
 }
 
-const Button = ({ type, text, className }: Button) => {
+const Button = ({ type, className, children, onClick }: Button) => {
   const id = useId();
   return (
-    <button type={type} id={id} className={className}>
-      {text}
+    <button type={type} id={id} className={className} onClick={onClick}>
+      {children}
     </button>
   );
 };

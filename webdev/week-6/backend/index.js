@@ -2,6 +2,7 @@
 
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const cors = require("cors");
 const app = express();
 
 // JWT secret
@@ -11,13 +12,21 @@ const JWT_SECRET = "secretissecret";
 // memory storage for storing useers
 const users = [];
 
+const corsOptions = {
+  origin: "*",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+};
+
 // middlewares
 app.use(express.json());
+app.use(cors(corsOptions));
 
 // auth middleware
 
 function auth(req, res, next) {
   const { token } = req.headers;
+  console.log(token);
+  console.log("hitted middleware");
   const verifyUser = jwt.verify(token, JWT_SECRET);
   if (verifyUser.username) {
     req.username = verifyUser.username;
@@ -107,7 +116,8 @@ app.post("/signin", (req, res) => {
     // user.token = token;
 
     const token = jwt.sign({ username: username }, JWT_SECRET);
-    return res.json({ message: token });
+    console.log(token);
+    return res.json({ token: token });
   } else {
     return res.status(403).json({ message: "Invalid username or password" });
   }
@@ -124,7 +134,7 @@ app.post("/signup", (req, res) => {
     password: password,
   });
 
-  res.json({ message: "you're signed up " });
+  res.status(200).json({ message: "you're signed up " });
 });
 
 // personal info. end point
@@ -140,7 +150,7 @@ app.get("/me", auth, (req, res) => {
   */
   const user = users.find((user) => user.username === req.username);
 
-  return res.json({
+  return res.status(200).json({
     username: user.username,
     password: user.password,
   });
