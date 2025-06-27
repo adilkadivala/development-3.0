@@ -1,9 +1,11 @@
 require("dotenv").config();
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const { TodoModal, UserModal } = require("./db");
 const mongoose = require("mongoose");
 const app = express();
+const { z } = require("zod");
 
 mongoose.connect(process.env.DATA_BASE_URL);
 
@@ -34,23 +36,49 @@ app.get("/", (req, res) => {
 
 // sign-up
 app.post("/sign-up", async (req, res) => {
+  const requireBody = z.object({
+    name: z.string().min(3).max(15),
+    email: z.string().min(3).max(50).email(),
+    name: z.string().min(3).max(1000),
+  });
+
+  // const parseData = requireBody.parse(req.body);
+  const parseData = requireBody.safeParse(req.body);
+
+  if (!parseData.success) {
+    res.json({ messgage: "incorrect inputs", error: parseData.error });
+
+    return;
+  }
+
   const { name, email, password } = req.body;
+  const hashedPass = await bcrypt.hash(password, 10);
 
   await UserModal.create({
     name: name,
     email: email,
-    password: password,
+    password: hashedPass,
   });
 
-  return res.json({ message: "You're Logged in" });
+  return res.json({ message: "Account created!!" });
 });
 
 // sing-in
 app.post("/sign-in", async (req, res) => {
   const { email, password } = req.body;
-  const user = await UserModal.findOne({ email: email, password: password });
 
-  if (user) {
+  const user = await UserModal.findOne({ email: email });
+
+  if (!user) {
+    res.status(403).json({
+      message: "User doesn't exist",
+    });
+    return;
+  }
+
+  const checkPass = bcrypt.compare(password, user.password);
+
+  if (checkPass) {
     const token = jwt.sign({ id: user._id.toString() }, JWT_SECRET);
     return res.status(200).json({ token: token });
   } else {
