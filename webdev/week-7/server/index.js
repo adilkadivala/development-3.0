@@ -37,9 +37,9 @@ app.get("/", (req, res) => {
 // sign-up
 app.post("/sign-up", async (req, res) => {
   const requireBody = z.object({
-    name: z.string().min(3).max(15),
+    name: z.string({ error: "Bad!" }).min(3).max(15),
     email: z.string().min(3).max(50).email(),
-    name: z.string().min(3).max(1000),
+    password: z.string().min(3).max(1000).regex(),
   });
 
   // const parseData = requireBody.parse(req.body);
