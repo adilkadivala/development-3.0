@@ -37,7 +37,7 @@ app.get("/", (req, res) => {
 // sign-up
 app.post("/sign-up", async (req, res) => {
   const requireBody = z.object({
-    name: z.string({ error: "Bad!" }).min(3).max(15),
+    name: z.string().min(3).max(15),
     email: z.string().min(3).max(50).email(),
     password: z.string().min(3).max(1000).regex(),
   });
@@ -47,7 +47,6 @@ app.post("/sign-up", async (req, res) => {
 
   if (!parseData.success) {
     res.json({ messgage: "incorrect inputs", error: parseData.error });
-
     return;
   }
 

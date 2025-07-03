@@ -13,14 +13,16 @@ router.route("/api/v1/purchasecourses").post(courses.purchaseCourses);
 router.route("/api/v1/showpurchasecourses").get(courses.showPurchaseCourses);
 
 // auth
-router.route("/api/v1/sign-in").post(auth.signIn);
-router.route("/api/v1/sign-up").post(auth.signUp);
+router.route("/api/v1/users/sign-in").post(auth.signIn);
+router.route("/api/v1/users/sign-up").post(auth.signUp);
+router.route("/api/v1/users/me").get(auth.userDetail);
 
 // admin //
 
 // auth
-router.route("/api/v1/sign-in").post(adminauth.signIn);
-router.route("/api/v1/sign-up").post(adminauth.signUp);
+router.route("/api/v1/admin/sign-in").post(adminauth.signIn);
+router.route("/api/v1/admin/sign-up").post(adminauth.signUp);
+router.route("/api/v1/admin/me").get(adminauth.adminDetail);
 
 // course
 router.route("/api/v1/getcourses").get(admincourses.getCourses);
