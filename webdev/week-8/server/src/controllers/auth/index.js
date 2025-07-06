@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const my_secret = process.env.JWT_SECRET || "thisisjustsecret";
+const user_secret = process.env.JWT_SECRET_USER;
 const { z } = require("zod");
 const bcrypt = require("bcrypt");
 const { userModel } = require("../../db/schema");
@@ -32,7 +32,7 @@ const signIn = async (req, res) => {
     const verifyUser = await bcrypt.compare(password, user.password);
 
     if (verifyUser) {
-      const token = jwt.sign({ id: user._id.toString() }, my_secret);
+      const token = jwt.sign({ id: user._id.toString() }, user_secret);
       return res.status(200).json({ token: token });
     } else {
       return res.status(403).json({ message: "invalid cradentials" });
@@ -89,31 +89,9 @@ const signUp = async (req, res) => {
 //me
 const userDetail = async (req, res) => {
   try {
-    const verifiedField = z.object({
-      token: z.string(),
-    });
-
-    const verifiedData = verifiedField.safeParse(req.headers);
-
-    if (!verifiedData.success) {
-      res.json({
-        messgage: "incorrect inputs",
-        error: verifiedData.error.issues,
-      });
-      return;
-    }
-
-    const { token } = req.headers;
-
-    const verifyUser = await jwt.verify(token, my_secret);
-
-    if (!verifyUser) {
-      res.json({ message: "invalid cradentials" });
-      return;
-    }
-
-    const userId = verifyUser.id;
-
+    
+    const userId = req.userId;
+  
     const user = await userModel.findOne({
       _id: userId,
     });

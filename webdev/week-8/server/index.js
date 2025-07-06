@@ -10,6 +10,7 @@ app.use(express.json());
 app.use(router);
 
 // welcome route
+
 app.get("/", (req, res) => {
   res.send("hey! your most welcom to my server");
 });

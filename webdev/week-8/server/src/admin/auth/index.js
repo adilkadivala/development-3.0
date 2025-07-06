@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const my_sercet = process.env.JWT_SECRET || "thisisjustsecret";
+const admin_sercet = process.env.JWT_SECRET_ADMIN;
 const { z, string } = require("zod");
 const bcrypt = require("bcrypt");
 const { adminModel } = require("../../db/schema");
@@ -33,7 +33,7 @@ const signIn = async (req, res) => {
     const verifyAdmin = await bcrypt.compare(password, admin.password);
 
     if (verifyAdmin) {
-      const token = await jwt.sign({ id: admin._id.toString() }, my_sercet);
+      const token = await jwt.sign({ id: admin._id.toString() }, admin_sercet);
       res.send({ toekn: token });
     } else {
       res.send({ message: "invalid cradentials" });
@@ -89,21 +89,7 @@ const signUp = async (req, res) => {
 //admin-details
 const adminDetail = async (req, res) => {
   try {
-    const verifiedField = z.object({
-      token: string(),
-    });
-
-    const verifiedData = verifiedField.safeParse(req.headers);
-
-    if (!verifiedData.success) {
-      res.json({ messgage: "incorrect inputs", error: verifiedData.error });
-      return;
-    }
-
-    const { token } = req.headers;
-
-    const verifyAdmin = jwt.verify(token, my_sercet);
-    const adminId = verifyAdmin.id;
+    const adminId = req.adminId;
 
     const admin = await adminModel.findOne({
       _id: adminId,
