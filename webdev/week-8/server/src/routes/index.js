@@ -12,7 +12,9 @@ const { adminMiddleware } = require("../middleware/admin");
 // course
 router.route("/api/v1/getcourses").get(courses.getCourses);
 router.route("/api/v1/purchasecourses").post(courses.purchaseCourses);
-router.route("/api/v1/showpurchasecourses").get(courses.showPurchaseCourses);
+router
+  .route("/api/v1/showpurchasecourses")
+  .get(userMiddleware, courses.showPurchaseCourses);
 
 // auth
 router.route("/api/v1/users/sign-in").post(auth.signIn);
@@ -27,9 +29,17 @@ router.route("/api/v1/admin/sign-up").post(adminauth.signUp);
 router.route("/api/v1/admin/me").get(adminMiddleware, adminauth.adminDetail);
 
 // course
-router.route("/api/v1/getcourses").get(admincourses.getCourses);
-router.route("/api/v1/createcourses").post(admincourses.createCourses);
-router.route("/api/v1/updatecourses").put(admincourses.updateCourses);
-router.route("/api/v1/deletecourses").delete(admincourses.deleteCourses);
+router
+  .route("/api/v1/admin/getcourses")
+  .get(adminMiddleware, admincourses.getCourses);
+router
+  .route("/api/v1/createcourses")
+  .post(adminMiddleware, admincourses.createCourses);
+router
+  .route("/api/v1/updatecourses")
+  .put(adminMiddleware, admincourses.updateCourses);
+router
+  .route("/api/v1/deletecourses")
+  .delete(adminMiddleware, admincourses.deleteCourses);
 
 module.exports = router;
