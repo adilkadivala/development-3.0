@@ -11,7 +11,7 @@ const { adminMiddleware } = require("../middleware/admin");
 
 // course
 router.route("/api/v1/getcourses").get(courses.getCourses);
-router.route("/api/v1/purchasecourses").post(courses.purchaseCourses);
+router.route("/api/v1/purchasecourses").post(userMiddleware, courses.purchaseCourses);
 router
   .route("/api/v1/showpurchasecourses")
   .get(userMiddleware, courses.showPurchaseCourses);
