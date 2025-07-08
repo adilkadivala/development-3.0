@@ -1,4 +1,4 @@
-const { purchasesModel } = require("../../db/schema");
+const { purchasesModel, coursesModel, userModel } = require("../../db/schema");
 
 // get all course
 const getCourses = async (req, res) => {
@@ -33,7 +33,20 @@ const showPurchaseCourses = async (req, res) => {
     const userId = req.userId;
 
     const myPurchases = await purchasesModel.find({ userId });
-    res.send({ messagge: "this is user purchase cart", myPurchases });
+
+    const courseDetail = await coursesModel.find({
+      _id: { $in: myPurchases.map((course) => course.courseId) },
+    });
+    const userDetail = await userModel.find({
+      _id: { $in: myPurchases.map((user) => user.userId) },
+    });
+
+    res.send({
+      messagge: "this is user purchase cart",
+      myPurchases,
+      courseDetail,
+      userDetail,
+    });
   } catch (error) {
     console.log(error);
   }
