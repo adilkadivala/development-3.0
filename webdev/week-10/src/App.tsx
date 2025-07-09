@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import { motion } from "motion/react";
 import "./App.css";
 
 // context
@@ -8,9 +9,11 @@ const BulbContext = createContext();
 function BulbProvider({ children }) {
   const [bulbOn, setBulbOn] = useState<boolean>(true);
 
-  return <BulbContext.Provider value={{ bulbOn, setBulbOn }}>
-    {children}
-  </BulbContext.Provider>;
+  return (
+    <BulbContext.Provider value={{ bulbOn, setBulbOn }}>
+      {children}
+    </BulbContext.Provider>
+  );
 }
 
 // main component
@@ -46,5 +49,21 @@ function ToggleBulb() {
   function toggle() {
     setBulbOn((currentState) => !currentState);
   }
-  return <button onClick={toggle}>ToggleBulb</button>;
+  return (
+    <motion.button
+      initial={{
+        rotate: 0,
+      }}
+      animate={{
+        rotate: [0, 20, 0],
+      }}
+      transition={{
+        duration: 0.5,
+        ease: "easeInOut",
+      }}
+      onClick={toggle}
+    >
+      ToggleBulb
+    </motion.button>
+  );
 }
