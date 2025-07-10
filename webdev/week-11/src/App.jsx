@@ -56,11 +56,29 @@ function usePrev(value) {
   return ref.current;
 }
 
+// debouncing hook
+function useDebaunce(originalFn) {
+  const currentClock = useRef();
+
+  const fn = () => {
+    clearTimeout(currentClock.current);
+    currentClock.current = setTimeout(originalFn, 500);
+  };
+
+  return fn;
+}
+
 function App() {
+  function sendQuerytoBackend() {
+    fetch("api.amazon.com/search");
+  }
+
+  const debounceFn = useDebaunce(sendQuerytoBackend);
   return (
     <>
       <Counter />
       <GetData />
+      <input type="text" name="input" id="1" onChange={debounceFn}></input>
     </>
   );
 }
