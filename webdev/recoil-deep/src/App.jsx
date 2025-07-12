@@ -131,11 +131,14 @@ function TodoDummy({ id }) {
 
   if (todo.state === "loading") {
     return <p>Loading....</p>;
-  } else if (todo.state === "hasValue")
+  } else if (todo.state === "hasValue") {
     return (
       <>
         <p>{todo.contents.todo}</p>
         <p>{todo.contents.completed}</p>
       </>
     );
+  } else if (todo.state === "hasError") {
+    return <p>sorry ! occupide by error</p>;
+  }
 }

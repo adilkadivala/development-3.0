@@ -1,0 +1,11 @@
+-localhost
+
+Local-host : referes to the computer you're currently working on, it's essentially a loop-back address that points to the mechine itself;
+
+-ip
+
+ip: there are two types of ip;
+
+ipv4 and ipv6
+
+ipv4 can start from 0.0.0.0 and can go to 255.255.255.255  not cross this number,

@@ -29,6 +29,7 @@ export const TodosSelectorFamily = atomFamily({
       (id) =>
       async ({ get }) => {
         await new Promise((r) => setTimeout(r, 3000));
+        
         const res = await fetch(`https://dummyjson.com/todos/${id}`);
         return res.json();
       },
