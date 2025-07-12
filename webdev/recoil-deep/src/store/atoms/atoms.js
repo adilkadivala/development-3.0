@@ -1,4 +1,5 @@
-import { atom } from "recoil";
+import { atom, atomFamily } from "recoil";
+import { TODOS } from "../../todos";
 
 export const networkAtom = atom({
   key: "network",
@@ -15,4 +16,11 @@ export const notificationAtom = atom({
 export const messagingAtom = atom({
   key: "message",
   default: 3,
+});
+
+export const todosFamily = atomFamily({
+  key: "todo",
+  default: (id) => {
+    return TODOS.find((t) => t.id === id);
+  },
 });

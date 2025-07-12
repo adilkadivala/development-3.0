@@ -1,7 +1,9 @@
 import {
   RecoilRoot,
   useRecoilState,
+  useRecoilStateLoadable,
   useRecoilValue,
+  useRecoilValueLoadable,
   useSetRecoilState,
 } from "recoil";
 import "./App.css";
@@ -10,13 +12,24 @@ import {
   notificationAtom,
   JobskAtom,
   messagingAtom,
+  todosFamily,
 } from "./store/atoms/atoms";
-import { totalNotficationSelector } from "./store/selectors/selector";
+import {
+  TodosSelectorFamily,
+  totalNotficationSelector,
+} from "./store/selectors/selector";
 
 function App() {
   return (
     <RecoilRoot>
       <Navbar />
+      <Todo id={1} />
+      <Todo id={2} />
+      <span>this is from dummy json</span>
+      <TodoDummy id={1} />
+      <TodoDummy id={3} />
+      <TodoDummy id={5} />
+      <TodoDummy id={2} />
     </RecoilRoot>
   );
 }
@@ -100,4 +113,29 @@ function UpdateNotification() {
       </button>
     </>
   );
+}
+
+function Todo({ id }) {
+  const currentTodo = useRecoilValue(todosFamily(id));
+
+  return (
+    <>
+      <p>{currentTodo.title}</p>
+      <p>{currentTodo.description}</p>
+    </>
+  );
+}
+function TodoDummy({ id }) {
+  // const [todo, setTodo] = useRecoilStateLoadable(TodosSelectorFamily(id));
+  const todo = useRecoilValueLoadable(TodosSelectorFamily(id));
+
+  if (todo.state === "loading") {
+    return <p>Loading....</p>;
+  } else if (todo.state === "hasValue")
+    return (
+      <>
+        <p>{todo.contents.todo}</p>
+        <p>{todo.contents.completed}</p>
+      </>
+    );
 }

@@ -29,7 +29,6 @@ function useFetch(url) {
   const getData = async () => {
     const response = await fetch(url);
     const json = await response.json();
-    console.log(json);
     setPost(json);
   };
 
