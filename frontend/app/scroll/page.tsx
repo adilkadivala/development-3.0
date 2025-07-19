@@ -70,22 +70,22 @@ const features: Feature[] = [
 const Scroll = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const backgrounds = ["#343434", "#00193b", "#05291c"];
-  const [background, setBackground] = useState(backgrounds[0]);
+  // const [background, setBackground] = useState(backgrounds[0]);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"],
   });
 
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    setBackground(backgrounds[Math.floor(latest * backgrounds.length)]);
-  });
+  // useMotionValueEvent(scrollYProgress, "change", (latest) => {
+  //   setBackground(backgrounds[Math.floor(latest * backgrounds.length)]);
+  // });
 
   return (
     <motion.div
-      animate={{
-        background,
-      }}
+      // animate={{
+      //   background,
+      // }}
       transition={{
         duration: 1,
         ease: "easeInOut",
