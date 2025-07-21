@@ -122,3 +122,24 @@ users.set("2dasdsad", { name: "raman", age: 20, email: "raman@gmail.com" });
 const uSEr = users.get("1daa");
 console.log(uSEr);
 //
+
+
+// type infer in zod
+
+/*
+
+import z from 'zod';
+
+const userProfile = z.object({
+name:z.string(),
+email:z.string(),
+password:z.string(),
+});
+
+
+type USerProfile = z.infer<typeof userProfile>; 
+
+
+z.infer will infer types of fields, we no need more to define separatly again....
+
+*/
