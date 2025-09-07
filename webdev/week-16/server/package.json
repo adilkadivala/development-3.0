@@ -1,0 +1,20 @@
+{
+  "name": "week-16",
+  "version": "1.0.0",
+  "description": "- http server has route, and when ever a client sent a request to server, server sent response back to the client, and this is not call persistent connection,",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node ./dist/index.js",
+    "dev": "tsc -b && npm start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/ws": "^8.18.1",
+    "typescript": "^5.9.2",
+    "ws": "^8.18.3"
+  }
+}
