@@ -6,6 +6,8 @@
 
 this is pure websocket with node...
 
+web-socket jsut for real-time communication..
+
 ### web-socket vs webRtc
 ### poling concept
 ### types of web-socket and socket, webRtc;
