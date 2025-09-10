@@ -9,4 +9,9 @@ wss.on("connection", function (socket) {
       socket.send("pong");
     }
   });
+
+  socket.on("message", (message) => {
+    console.log("message recevied !" + message.toString());
+    socket.send(message.toString() + "sent from the server");
+  });
 });
