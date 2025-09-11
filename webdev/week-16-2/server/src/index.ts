@@ -10,7 +10,9 @@ let allSockets: User[] = [];
 
 wss.on("connection", (socket) => {
   socket.on("message", (message) => {
+    // @ts-ignore
     const parsedMessage = JSON.parse(message);
+    console.log(parsedMessage.payload.roomId);
 
     if (parsedMessage.type === "join") {
       allSockets.push({
@@ -26,6 +28,7 @@ wss.on("connection", (socket) => {
           currentUserRoom = allSockets[i]?.room;
         }
       }
+
       for (let i = 0; i < allSockets.length; i++) {
         if (allSockets[i]?.room == currentUserRoom) {
           allSockets[i]?.socket.send(parsedMessage.payload.message);
@@ -33,6 +36,4 @@ wss.on("connection", (socket) => {
       }
     }
   });
-
-  socket.on("disconnect", () => {});
 });

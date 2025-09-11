@@ -1,35 +1,70 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useRef, useState } from "react";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [messages, setMessages] = useState(["hi ! there", "hello"]);
+  const wsRef = useRef();
+
+  useEffect(() => {
+    const ws = new WebSocket("http://localhost:8000");
+
+    ws.onmessage = (event) => {
+      setMessages((m) => [...m, event.data]);
+    };
+    wsRef.current = ws;
+
+    ws.onopen = () => {
+      ws.send(
+        JSON.stringify({
+          type: "join",
+          payload: {
+            roomId: "red",
+          },
+        })
+      );
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="h-screen bg-black flex flex-col">
+      <div className="h-11/12 p-2">
+        {messages?.map((msg) => (
+          <div className="text-white p-2 mt-1 rounded-sm border border-slate-400 w-fit">
+            {msg}
+          </div>
+        ))}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+      <div className="flex justify-around not-last-of-type:h-1/12">
+        <input
+          id="message"
+          type="text"
+          placeholder="write a message....."
+          className="w-3/5 text-white p-4 border border-slate-500 placeholder:text-slate-400"
+        />
+        <button
+          type="button"
+          className="w-1/3 bg-indigo-700 text-white rounded-sm cursor-pointer"
+          onClick={() => {
+            const message = document.getElementById("message")?.value;
+            wsRef?.current?.send(
+              JSON.stringify({
+                type: "chat",
+                payload: {
+                  message: message,
+                },
+              })
+            );
+          }}
+        >
+          Send
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
