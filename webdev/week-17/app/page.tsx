@@ -9,9 +9,7 @@ export default function Home() {
 
   useEffect(() => {
     axios
-      .get(
-        "https://week-13-offline.kirattechnologies.workers.dev/api/v1/user/details"
-      )
+      .get("/api/v1/user/details")
       .then((response) => setData(response.data));
     setLoading(false);
   }, []);
