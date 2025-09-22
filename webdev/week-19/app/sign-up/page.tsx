@@ -5,7 +5,7 @@ import { useState } from "react";
 
 export default function Signin() {
   const [userDetail, setUserDetail] = useState({
-    email: "",
+    username: "",
     password: "",
   });
 
@@ -28,7 +28,7 @@ export default function Signin() {
                 type="text"
                 className="border"
                 onChange={(e) => {
-                  setUserDetail({ ...userDetail, email: e.target.value });
+                  setUserDetail({ ...userDetail, username: e.target.value });
                 }}
               />
               <input
