@@ -1,69 +1,31 @@
-const crypto = require("crypto");
+const { Keypair } = require("@solana/web3.js");
+const nacl = require("tweetnacl");
+const { generateMnemonic } = require("bip39");
 
-const input = "100xdevs";
-const hash = crypto.createHash("sha256").update(input).digest("hex");
+// Generate a new keypair
+const keypair = Keypair.generate();
 
-console.log(hash);
+// Extract the public and private keys
+const publicKey = keypair.publicKey.toString();
+const secretKey = keypair.secretKey;
 
-// Function to find an input string that produces a hash starting with '00000'
-function findHashWithPrefix(prefix) {
-  let input = 0;
-  while (true) {
-    let inputStr = input.toString();
-    let hash = crypto.createHash("sha256").update(inputStr).digest("hex");
-    if (hash.startsWith(prefix)) {
-      return { input: inputStr, hash: hash };
-    }
-    input++;
-  }
-}
+// Display the keys
+console.log("Public Key:", publicKey);
+console.log("Private Key (Secret Key):", secretKey);
 
-// Find and print the input string and hash
-const result = findHashWithPrefix("00000");
-console.log(`Input: ${result.input}`);
-console.log(`Hash: ${result.hash}`);
+// Convert the message "hello world" to a Uint8Array
+const message = new TextEncoder().encode("hello world");
 
+const signature = nacl.sign.detached(message, secretKey);
+const result = nacl.sign.detached.verify(
+  message,
+  signature,
+  keypair.publicKey.toBytes()
+);
 
-// ----- //
-
-function findHashWithPrefixandStr(prefix) {
-  let input = 0;
-  while (true) {
-    let inputStr = "100xdevs" + input.toString();
-    let hash = crypto.createHash("sha256").update(inputStr).digest("hex");
-    if (hash.startsWith(prefix)) {
-      return { input: inputStr, hash: hash };
-    }
-    input++;
-  }
-}
-
-// Find and print the input string and hash
-const Fresult = findHashWithPrefixandStr("00000");
-console.log(`Input: ${Fresult.input}`);
-console.log(`Hash: ${Fresult.hash}`);
-
-
-// ---- // 
-
-
-function findHashWithPrefixFind(prefix) {
-    let input = 0;
-    while (true) {
-        let inputStr = `
-harkirat => Raman | Rs 100
-Ram => Ankit | Rs 10
-` + input.toString();
-        let hash = crypto.createHash('sha256').update(inputStr).digest('hex');
-        if (hash.startsWith(prefix)) {
-            return { input: inputStr, hash: hash };
-        }
-        input++;
-    }
-}
-
-// Find and print the input string and hash
-const Nresult = findHashWithPrefixFind('00000');
-console.log(`Input: ${Nresult.input}`);
-console.log(`Hash: ${Nresult.hash}`);
-
+console.log(result);
+// Generate a 12-word mnemonic
+const mnemonic = generateMnemonic();
+console.log("Generated Mnemonic:", mnemonic);
+const seed = mnemonicToSeedSync(mnemonic);
+console.log(seed, "generated seed");
