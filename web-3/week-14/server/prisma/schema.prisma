@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  password  String
+  name      String
+  launches  Launch[]
+  purchases Purchase[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Launch {
+  id            Int                @id @default(autoincrement())
+  name          String
+  symbol        String
+  totalSupply   Float
+  pricePerToken Float
+  startsAt      DateTime
+  endsAt        DateTime
+  maxPerWallet  Float
+  description   String
+  creatorId     Int
+  creator       User               @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  tiers         Tier[]
+  vesting       VestingConfig?
+  whitelist     WhitelistAddress[]
+  referrals     ReferralCode[]
+  purchases     Purchase[]
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+}
+
+model Tier {
+  id            Int    @id @default(autoincrement())
+  launchId       Int
+  launch        Launch @relation(fields: [launchId], references: [id], onDelete: Cascade)
+  minAmount     Float
+  maxAmount     Float
+  pricePerToken Float
+  sortOrder     Int
+
+  @@index([launchId, sortOrder])
+}
+
+model VestingConfig {
+  id          Int    @id @default(autoincrement())
+  launchId    Int    @unique
+  launch      Launch @relation(fields: [launchId], references: [id], onDelete: Cascade)
+  cliffDays   Int
+  vestingDays Int
+  tgePercent  Int
+}
+
+model WhitelistAddress {
+  id        Int    @id @default(autoincrement())
+  launchId  Int
+  launch    Launch @relation(fields: [launchId], references: [id], onDelete: Cascade)
+  address   String
+  createdAt DateTime @default(now())
+
+  @@unique([launchId, address])
+}
+
+model ReferralCode {
+  id              Int      @id @default(autoincrement())
+  launchId        Int
+  launch          Launch   @relation(fields: [launchId], references: [id], onDelete: Cascade)
+  code            String
+  discountPercent Float
+  maxUses         Int
+  usedCount       Int      @default(0)
+  purchases       Purchase[]
+  createdAt       DateTime @default(now())
+
+  @@unique([launchId, code])
+}
+
+model Purchase {
+  id            Int      @id @default(autoincrement())
+  launchId      Int
+  launch        Launch   @relation(fields: [launchId], references: [id], onDelete: Cascade)
+  userId        Int
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  walletAddress String
+  amount        Float
+  totalCost     Float
+  txSignature   String   @unique
+  referralCodeId Int?
+  referralCode  ReferralCode? @relation(fields: [referralCodeId], references: [id], onDelete: SetNull)
+  createdAt     DateTime @default(now())
+
+  @@index([launchId, userId])
+  @@index([launchId, walletAddress])
+}
