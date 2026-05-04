@@ -18,6 +18,7 @@ const fromPubKey = new PublicKey(
 );
 
 function App() {
+  
   async function sendSol() {
     const ix = SystemProgram.transfer({
       fromPubkey: fromPubKey,
@@ -38,7 +39,7 @@ function App() {
       verifySignatures: false,
     });
 
-    axios.post("/api/v1/transactions/sign", {
+    await axios.post("/api/v1/sign-tranaction", {
       messsage: serializedTX,
       retry: false,
     });
